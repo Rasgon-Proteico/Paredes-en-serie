@@ -3,9 +3,9 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <U8g2lib.h>
-
-// A4 y A5 están ocupados por el bus I2C (BME280 + OLED)
-const uint8_t SENSOR_PINS[5] = {A0, A1, A2, A3, A6};
+int m;
+// A4 y A5 ocupados por I2C 
+const uint8_t SENSOR_PINS[3] = {A0, A1, A2};
 const int NUM_ANALOG_SENSORES = 5;
 const float V_REF_MV = 5000.0f; 
 
@@ -89,6 +89,7 @@ void loop() {
   }
 
   Serial.println("--- Lecturas ---");
+  Serial.println(m++);
   for (int i = 0; i < NUM_ANALOG_SENSORES; i++) {
     Serial.print("Sensor "); Serial.print(i + 1);
     if (i == 4) {
@@ -117,18 +118,13 @@ void loop() {
     u8g2.setFont(u8g2_font_6x10_tf);
 
     u8g2.setCursor(0, 9);
-    u8g2.print("S1:"); u8g2.print(temps_analog[0], 1); u8g2.print("C");
+    u8g2.print("S1:"); u8g2.print(temps_analog[0]*.56, 1); u8g2.print("C");
     u8g2.setCursor(65, 9);
     u8g2.print("S2:"); u8g2.print(temps_analog[1], 1); u8g2.print("C");
 
     u8g2.setCursor(0, 21);
-    u8g2.print("S3:"); u8g2.print(temps_analog[2], 1); u8g2.print("C");
-    u8g2.setCursor(65, 21);
-    u8g2.print("S4:"); u8g2.print(temps_analog[3], 1); u8g2.print("C");
-
-    u8g2.setCursor(0, 33);
-    u8g2.print("S5:"); u8g2.print(temps_analog[4], 1); u8g2.print("C (A6)");
-
+    u8g2.print("S3:"); u8g2.print(temps_analog[2]/12, 1); u8g2.print("C");
+    
     u8g2.drawHLine(0, 37, 128);
 
     u8g2.setCursor(0, 49);
